@@ -1,0 +1,33 @@
+
+maps.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+stage
+  rotate: false
+  xy: 0, 1280
+  size: 840, 640
+  orig: 840, 640
+  offset: 0, 0
+  index: 1
+stage
+  rotate: false
+  xy: 0, 640
+  size: 840, 640
+  orig: 840, 640
+  offset: 0, 0
+  index: 2
+stage
+  rotate: false
+  xy: 840, 1280
+  size: 840, 640
+  orig: 840, 640
+  offset: 0, 0
+  index: 3
+stage
+  rotate: false
+  xy: 0, 0
+  size: 840, 640
+  orig: 840, 640
+  offset: 0, 0
+  index: 4
