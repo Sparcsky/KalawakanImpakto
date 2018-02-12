@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by IAN on 2/11/2018.
@@ -11,14 +12,13 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class Entity extends GameObject {
 
+    protected Animation<TextureRegion> animation;
+
     private static final float ANIM_SPEED = .05f;
     private float stateTime;
-
-    private Animation<TextureRegion> animation;
-
     private float speed = 1;
 
-    public void follow(float x, float y, float distance) {
+    public void follow(float x, float y) {
         float dx = (x - getWidth() / 2) - sprite.getX();
         float dy = (y - getHeight() / 2) - sprite.getY();
 
@@ -38,7 +38,17 @@ public class Entity extends GameObject {
         sprite.setRegion(frame);
     }
 
+    public void attack() {
+
+    }
+
     public void setAnimation(TextureAtlas atlas, String name) {
-        animation = new Animation<TextureRegion>(ANIM_SPEED, atlas.findRegions(name), Animation.PlayMode.LOOP);
+        Array<TextureAtlas.AtlasRegion> regions = atlas.findRegions(name);
+
+        animation = new Animation<TextureRegion>(ANIM_SPEED, regions);
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 }

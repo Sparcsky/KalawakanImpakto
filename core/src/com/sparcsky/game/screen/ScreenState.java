@@ -3,8 +3,11 @@ package com.sparcsky.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.sparcsky.game.Assets;
 import com.sparcsky.game.core.KalawakanImpakto;
+import com.sparcsky.game.objects.GameObject;
 
 /**
  * Created by IAN on 2/10/2018.
@@ -12,21 +15,27 @@ import com.sparcsky.game.core.KalawakanImpakto;
 
 public abstract class ScreenState implements Screen {
 
+    protected KalawakanImpakto game;
+    protected GameObject cursor;
+
+    OrthographicCamera camera;
+    Assets assets;
+
     int screenWidth = Gdx.graphics.getWidth();
     int screenHeight = Gdx.graphics.getHeight();
-    float mouseX = Gdx.input.getX();
-    float mouseY = Gdx.input.getY();
-
-    protected KalawakanImpakto game;
-    Assets assets;
 
     public ScreenState(KalawakanImpakto game) {
         this.game = game;
         this.assets = Assets.getInstance();
+
+        cursor = new GameObject();
+
+        camera = new OrthographicCamera(screenWidth, screenHeight);
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.update();
     }
 
     public abstract void update(float delta);
-
 
     @Override
     public void render(float delta) {
@@ -40,6 +49,8 @@ public abstract class ScreenState implements Screen {
     public void resize(int width, int height) {
         this.screenWidth = width;
         this.screenHeight = height;
+        camera.setToOrtho(false, width, height);
+        camera.update();
     }
 
     @Override

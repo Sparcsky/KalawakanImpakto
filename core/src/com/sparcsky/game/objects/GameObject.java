@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by IAN on 2/11/2018.
@@ -11,12 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameObject {
 
-    Vector2 position;
+    public Vector2 position;
     Sprite sprite;
 
     float rotation;
-    float width;
-    float height;
 
     public GameObject() {
         sprite = new Sprite();
@@ -32,27 +31,21 @@ public class GameObject {
     }
 
     public void setPosition(float x, float y) {
-        this.position.x = x;
-        this.position.y = y;
+        this.position.x = x - getWidth() / 2;
+        this.position.y = y - getHeight() / 2;
     }
 
-    public void setSize(int width, int height) {
+    public void setPosition(Vector3 mousePos) {
+        position.x = mousePos.x;
+        position.y = mousePos.y;
+    }
+    public void setSize(float width, float height) {
         sprite.setSize(width, height);
         sprite.setOriginCenter();
     }
 
     public void setRegion(TextureRegion region) {
-        this.width = region.getRegionWidth();
-        this.height = region.getRegionHeight();
         sprite.setRegion(region);
-    }
-
-    public void setBounds(float x, float y, float width, float height) {
-        this.width = width;
-        this.height = height;
-        this.position.x = x;
-        this.position.y = y;
-        sprite.setBounds(x, y, width, height);
     }
 
     public float getHeight() {
@@ -70,4 +63,5 @@ public class GameObject {
     public float getY() {
         return sprite.getY();
     }
+
 }
