@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.sparcsky.game.Assets;
 import com.sparcsky.game.core.KalawakanImpakto;
 import com.sparcsky.game.objects.GameObject;
@@ -49,9 +48,11 @@ public abstract class ScreenState implements Screen {
     public void resize(int width, int height) {
         this.screenWidth = width;
         this.screenHeight = height;
+        game.batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
         camera.setToOrtho(false, width, height);
         camera.update();
     }
+
 
     @Override
     public void pause() {

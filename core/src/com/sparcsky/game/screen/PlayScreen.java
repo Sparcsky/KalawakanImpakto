@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.sparcsky.game.Assets;
 import com.sparcsky.game.core.KalawakanImpakto;
 import com.sparcsky.game.objects.Bullet;
-import com.sparcsky.game.objects.Entity;
 import com.sparcsky.game.objects.GameObject;
+import com.sparcsky.game.objects.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +19,15 @@ import java.util.List;
 
 public class PlayScreen extends ScreenState {
 
-
-    private TextureAtlas entityAtlas;
     private List<Bullet> bullets;
     private GameObject background;
-    private Entity player;
+    private Player player;
 
     PlayScreen(KalawakanImpakto game) {
         super(game);
         bullets = new ArrayList<Bullet>();
 
-        entityAtlas = assets.get(Assets.ENTITY_ATLAS);
+        TextureAtlas entityAtlas = assets.get(Assets.ENTITY_ATLAS);
         TextureAtlas mapAtlas = assets.get(Assets.MAP_ATLAS);
 
         cursor.setRegion(entityAtlas.findRegion("bullets"));
@@ -39,7 +37,7 @@ public class PlayScreen extends ScreenState {
         background.setRegion(mapAtlas.findRegion("stage", 1));
         background.setSize(screenWidth, screenHeight);
 
-        player = new Entity();
+        player = new Player(new Vector2(screenWidth / 2, screenHeight / 2));
         player.setSpeed(5.5f);
         player.setAnimation(entityAtlas.findRegions("player_walk"));
         player.setSize(64, 64);
@@ -55,20 +53,11 @@ public class PlayScreen extends ScreenState {
         Vector3 mousePos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
         cursor.setPosition(mousePos.x, mousePos.y);
+        player.follow(mousePos.x,mousePos.y);
 
         if (Gdx.input.isTouched()) {
-            Bullet bullet = new Bullet(new Vector2(player.getX(),player.getY()));
-            bullet.setAnimation(entityAtlas.findRegions("bullets"));
-            bullet.setSize(64, 64);
 
-            bullets.add(bullet);
         }
-
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).update(delta);
-        }
-
-        player.follow(mousePos.x, mousePos.y);
 
         cursor.update(delta);
         background.update(delta);
