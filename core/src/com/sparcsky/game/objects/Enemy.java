@@ -1,14 +1,13 @@
 package com.sparcsky.game.objects;
 
-import com.badlogic.gdx.math.Vector2;
-
 /**
- * Created by IAN on 2/13/2018.
+ * Created by IAN
+ * on 2/13/2018.
  */
 
 public class Enemy extends Entity {
 
-    public Enemy(Vector2 position) {
-        super(position);
+    public Enemy(float x, float y, float width, float height) {
+        super(x, y, width, height);
     }
 }

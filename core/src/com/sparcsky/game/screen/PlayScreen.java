@@ -2,12 +2,13 @@ package com.sparcsky.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.sparcsky.game.Assets;
+import com.sparcsky.game.BulletFactory;
 import com.sparcsky.game.core.KalawakanImpakto;
 import com.sparcsky.game.objects.Bullet;
-import com.sparcsky.game.objects.GameObject;
+import com.sparcsky.game.objects.BulletType;
+import com.sparcsky.game.objects.Entity;
 import com.sparcsky.game.objects.Player;
 
 import java.util.ArrayList;
@@ -19,28 +20,29 @@ import java.util.List;
 
 public class PlayScreen extends ScreenState {
 
-    private List<Bullet> bullets;
-    private GameObject background;
+    private Entity background;
     private Player player;
+    private List<Entity> entities = new ArrayList<Entity>();
 
     PlayScreen(KalawakanImpakto game) {
         super(game);
-        bullets = new ArrayList<Bullet>();
 
-        TextureAtlas entityAtlas = assets.get(Assets.ENTITY_ATLAS);
-        TextureAtlas mapAtlas = assets.get(Assets.MAP_ATLAS);
+        TextureAtlas entityAtlas = Assets.getInstance().get(Assets.ENTITY_ATLAS);
+        TextureAtlas mapAtlas = Assets.getInstance().get(Assets.MAP_ATLAS);
 
-        cursor.setRegion(entityAtlas.findRegion("bullets"));
-        cursor.setSize(50, 50);
+        cursor.setAnimation(entityAtlas.findRegions("bullets"));
+        cursor.setSize(32, 32);
+        cursor.setRotation(90);
 
-        background = new GameObject();
+        background = new Entity(0, 0, screenWidth, screenHeight);
         background.setRegion(mapAtlas.findRegion("stage", 1));
-        background.setSize(screenWidth, screenHeight);
 
-        player = new Player(new Vector2(screenWidth / 2, screenHeight / 2));
-        player.setSpeed(5.5f);
+        player = new Player(screenWidth / 2, screenHeight / 2, 64, 64);
         player.setAnimation(entityAtlas.findRegions("player_walk"));
-        player.setSize(64, 64);
+
+        entities.add(background);
+        entities.add(player);
+        entities.add(cursor);
     }
 
     @Override
@@ -50,18 +52,15 @@ public class PlayScreen extends ScreenState {
 
     @Override
     public void update(float delta) {
-        Vector3 mousePos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        Vector3 mouse = camera.unproject(new Vector3(Gdx.input.getX() - player.getWidth() / 2, Gdx.input.getY() + player.getHeight() / 2, 0));
 
-        cursor.setPosition(mousePos.x, mousePos.y);
-        player.follow(mousePos.x,mousePos.y);
+        cursor.setPosition(mouse.x, mouse.y);
+        player.followTarget(cursor, 0);
 
         if (Gdx.input.isTouched()) {
-
+            Bullet bullet = BulletFactory.createBullet(BulletType.NORMAL, player.getX(), player.getY());
+            player.fire(bullet, mouse.x, mouse.y);
         }
-
-        cursor.update(delta);
-        background.update(delta);
-        player.update(delta);
     }
 
     @Override
@@ -69,13 +68,10 @@ public class PlayScreen extends ScreenState {
         super.render(delta);
         game.batch.setProjectionMatrix(camera.combined);
 
-        background.render(game.batch);
-
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).render(game.batch);
+        for (Entity entity : entities) {
+            entity.update(delta);
+            entity.render(game.batch);
         }
-        player.render(game.batch);
-        cursor.render(game.batch);
     }
 
 }
