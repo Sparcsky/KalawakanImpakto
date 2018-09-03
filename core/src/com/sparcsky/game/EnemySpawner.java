@@ -12,7 +12,6 @@ import java.util.List;
 
 public class EnemySpawner {
 
-
     public enum EnemyType {
         SQUID
     }
@@ -27,11 +26,9 @@ public class EnemySpawner {
         enemies.add(enemy);
     }
 
-
     public void spawnFourEnemy(EnemyType type) {
         switch (type) {
             case SQUID:
         }
     }
-
 }

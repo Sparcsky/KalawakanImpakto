@@ -53,8 +53,8 @@ public class PlayScreen extends ScreenState {
     @Override
     public void update(float delta) {
         Vector3 mouse = camera.unproject(new Vector3(Gdx.input.getX() - player.getWidth() / 2, Gdx.input.getY() + player.getHeight() / 2, 0));
-
         cursor.setPosition(mouse.x, mouse.y);
+
         player.followTarget(cursor, 0);
 
         if (Gdx.input.isTouched()) {
@@ -73,5 +73,4 @@ public class PlayScreen extends ScreenState {
             entity.render(game.batch);
         }
     }
-
 }
